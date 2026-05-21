@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-export const getBooks = async () => {
+const getBooks = async () => {
   try {
     const response = await fetch(`${BASE_URL}/books`);
     const data = await response.json();
@@ -10,14 +10,22 @@ export const getBooks = async () => {
   }
 };
 
-export const addBook = async (book) => {
+const getBook = async (id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/books/${id}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const addBook = async (title, author, description) => {
   try {
     const response = await fetch(`${BASE_URL}/books`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(book)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, author, description }),
     });
     const data = await response.json();
     return data;
@@ -26,65 +34,48 @@ export const addBook = async (book) => {
   }
 };
 
-export const borrowBook = async (bookId) => {
+const borrowBook = async (id) => {
   try {
-    const response = await fetch(`${BASE_URL}/books/${bookId}/borrow`, {
-      method: 'POST'
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const returnBook = async (bookId) => {
-  try {
-    const response = await fetch(`${BASE_URL}/books/${bookId}/return`, {
-      method: 'POST'
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-export const login = async (username, password) => {
-  try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/books/${id}/borrow`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
     });
-    const data = await response.json();
-    return data;
+    await response.json();
   } catch (error) {
     console.error(error);
   }
 };
 
-export const register = async (username, password) => {
+const returnBook = async (id) => {
   try {
-    const response = await fetch(`${BASE_URL}/register`, {
+    const response = await fetch(`${BASE_URL}/books/${id}/return`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
     });
-    const data = await response.json();
-    return data;
+    await response.json();
   } catch (error) {
     console.error(error);
   }
 };
+
+export { getBooks, getBook, addBook, borrowBook, returnBook, BASE_URL };
 
 // Auto-generated missing exports by VIA
-export const BASE_URL = async (...args) => {
-  const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/base_url`);
-  if (!r.ok) throw new Error('BASE_URL failed');
+export const createItem = async (data) => {
+  const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/item`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+  if (!r.ok) throw new Error('createItem failed');
+  return r.json();
+};
+export const deleteItem = async (id) => {
+  const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/item/${id}`, { method: 'DELETE' });
+  if (!r.ok) throw new Error('deleteItem failed');
+  return r.json();
+};
+export const getItems = async () => {
+  const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/items`);
+  if (!r.ok) throw new Error('getItems failed');
+  return r.json();
+};
+export const getStats = async () => {
+  const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/stats`);
+  if (!r.ok) throw new Error('getStats failed');
   return r.json();
 };
